@@ -21,13 +21,16 @@ class SettingsModelAdapter extends TypeAdapter<SettingsModel> {
       currencyCode: fields[1] as String,
       currencySymbol: fields[2] as String,
       language: fields[3] as String,
+      isPinEnabled: fields[4] as bool,
+      pinHash: fields[5] as String?,
+      pinSalt: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SettingsModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.isDarkMode)
       ..writeByte(1)
@@ -35,7 +38,13 @@ class SettingsModelAdapter extends TypeAdapter<SettingsModel> {
       ..writeByte(2)
       ..write(obj.currencySymbol)
       ..writeByte(3)
-      ..write(obj.language);
+      ..write(obj.language)
+      ..writeByte(4)
+      ..write(obj.isPinEnabled)
+      ..writeByte(5)
+      ..write(obj.pinHash)
+      ..writeByte(6)
+      ..write(obj.pinSalt);
   }
 
   @override

@@ -86,10 +86,13 @@ class BackupService {
       }
 
       if (settingsJson != null) {
-        await HiveService.settingsBox.put(
-          HiveService.settingsKey,
-          SettingsModel.fromJson(settingsJson),
-        );
+        final restored = SettingsModel.fromJson(settingsJson);
+        final current = HiveService.settingsBox.get(HiveService.settingsKey);
+        // Preserve device-local PIN lock state; it's intentionally not part of the backup.
+        restored.isPinEnabled = current?.isPinEnabled ?? false;
+        restored.pinHash = current?.pinHash;
+        restored.pinSalt = current?.pinSalt;
+        await HiveService.settingsBox.put(HiveService.settingsKey, restored);
       }
 
       return const BackupResult(true, 'Backup restored successfully');

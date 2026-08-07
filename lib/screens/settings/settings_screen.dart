@@ -7,6 +7,8 @@ import '../../providers/category_provider.dart';
 import '../../providers/person_provider.dart';
 import '../../services/backup_service.dart';
 import '../../core/utils/currency_formatter.dart';
+import '../lock/lock_screen.dart';
+import '../lock/set_pin_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -39,6 +41,32 @@ class SettingsScreen extends ConsumerWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _showLanguagePicker(context, ref),
           ),
+          const Divider(),
+          _SectionHeader(title: 'Security'),
+          SwitchListTile(
+            title: const Text('PIN Lock'),
+            subtitle: Text(
+              settings.isPinEnabled
+                  ? 'Enabled — required to open the app'
+                  : 'Prevent others from opening this app',
+            ),
+            value: settings.isPinEnabled,
+            onChanged: (value) => value
+                ? _enablePin(context, ref)
+                : _disablePin(context, ref),
+          ),
+          if (settings.isPinEnabled)
+            ListTile(
+              leading: const Icon(Icons.password),
+              title: const Text('Change PIN'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SetPinScreen(requireCurrentVerification: true),
+                ),
+              ),
+            ),
           const Divider(),
           _SectionHeader(title: 'Data'),
           ListTile(
@@ -158,6 +186,61 @@ class SettingsScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _enablePin(BuildContext context, WidgetRef ref) async {
+    final acknowledged = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text('This PIN cannot be reset'),
+        content: const Text(
+          'Pocket Ledger stores everything only on this device. If you forget your PIN, '
+          'there is no "forgot PIN" option, no email recovery, and no support that can unlock '
+          'it for you — your records will be inaccessible until you erase the app\'s data, '
+          'which deletes all transactions permanently.\n\n'
+          'Make sure it\'s something you\'ll remember.',
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('I understand'),
+          ),
+        ],
+      ),
+    );
+    if (acknowledged != true || !context.mounted) return;
+
+    final wasSet = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const SetPinScreen()),
+    );
+    if (wasSet == true && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('PIN lock enabled')),
+      );
+    }
+  }
+
+  Future<void> _disablePin(BuildContext context, WidgetRef ref) async {
+    final verified = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (routeContext) => LockScreen(
+          onUnlocked: () => Navigator.pop(routeContext, true),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+    if (verified == true) {
+      await ref.read(settingsProvider.notifier).disablePin();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('PIN lock disabled')),
+        );
+      }
+    }
   }
 
   Future<bool?> _confirm(

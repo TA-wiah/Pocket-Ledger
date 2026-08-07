@@ -137,7 +137,7 @@ class _AddEditTransactionScreenState extends ConsumerState<AddEditTransactionScr
                       labelText: isLoanCategory ? 'Person *' : 'Person (optional)',
                     ),
                     items: [
-                      const DropdownMenuItem(value: null, child: Text('None')),
+                      if (!isLoanCategory) const DropdownMenuItem(value: null, child: Text('None')),
                       ...people.map((p) => DropdownMenuItem(value: p.id, child: Text(p.name))),
                     ],
                     onChanged: (value) => setState(() => _personId = value),

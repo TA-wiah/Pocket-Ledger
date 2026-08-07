@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'services/hive_service.dart';
 import 'core/theme/app_theme.dart';
 import 'providers/settings_provider.dart';
-import 'screens/shell/app_shell.dart';
+import 'screens/lock/app_lock_gate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ class PocketLedgerApp extends ConsumerWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: const AppShell(),
+      home: const AppLockGate(),
     );
   }
 }
