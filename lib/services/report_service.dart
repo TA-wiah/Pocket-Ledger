@@ -82,20 +82,18 @@ class ReportService {
       filterByDay(all, DateTime.now().subtract(const Duration(days: 1)));
 
   static List<TransactionModel> thisWeek(List<TransactionModel> all) {
-    final start = AppDateUtils.startOfWeek(DateTime.now());
-    return filterByRange(all, start, DateTime.now());
+    final now = DateTime.now();
+    return filterByRange(all, AppDateUtils.startOfWeek(now), AppDateUtils.endOfWeek(now));
   }
 
   static List<TransactionModel> thisMonth(List<TransactionModel> all) {
     final now = DateTime.now();
-    final start = AppDateUtils.startOfMonth(now);
-    return filterByRange(all, start, now);
+    return filterByRange(all, AppDateUtils.startOfMonth(now), AppDateUtils.endOfMonth(now));
   }
 
   static List<TransactionModel> thisYear(List<TransactionModel> all) {
     final now = DateTime.now();
-    final start = AppDateUtils.startOfYear(now);
-    return filterByRange(all, start, now);
+    return filterByRange(all, AppDateUtils.startOfYear(now), AppDateUtils.endOfYear(now));
   }
 
   static List<TransactionModel> lastMonth(List<TransactionModel> all) {
@@ -118,15 +116,20 @@ class ReportService {
     return income.map((t) => t.amount).reduce((a, b) => a > b ? a : b);
   }
 
+  static List<TransactionModel> _monthToDate(List<TransactionModel> all) {
+    final now = DateTime.now();
+    return filterByRange(all, AppDateUtils.startOfMonth(now), now);
+  }
+
   static double averageDailyIncome(List<TransactionModel> all) {
-    final monthTx = thisMonth(all).where((t) => t.type == TransactionType.income);
+    final monthTx = _monthToDate(all).where((t) => t.type == TransactionType.income);
     final total = monthTx.fold(0.0, (sum, t) => sum + t.amount);
     final day = DateTime.now().day;
     return day == 0 ? 0 : total / day;
   }
 
   static double averageDailyExpense(List<TransactionModel> all) {
-    final monthTx = thisMonth(all).where((t) => t.type == TransactionType.expense);
+    final monthTx = _monthToDate(all).where((t) => t.type == TransactionType.expense);
     final total = monthTx.fold(0.0, (sum, t) => sum + t.amount);
     final day = DateTime.now().day;
     return day == 0 ? 0 : total / day;

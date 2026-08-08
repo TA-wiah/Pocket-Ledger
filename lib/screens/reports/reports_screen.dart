@@ -19,9 +19,10 @@ class ReportsScreen extends ConsumerWidget {
     final period = ref.watch(reportPeriodProvider);
     final summary = ref.watch(periodSummaryProvider);
     final symbol = ref.watch(currencySymbolProvider);
+    final periodTransactions = _transactionsForPeriod(all, period);
     final monthlyTrend = ReportService.monthlyTrend(all, 6);
-    final expenseBreakdown = ReportService.categoryBreakdown(all, TransactionType.expense);
-    final incomeBreakdown = ReportService.categoryBreakdown(all, TransactionType.income);
+    final expenseBreakdown = ReportService.categoryBreakdown(periodTransactions, TransactionType.expense);
+    final incomeBreakdown = ReportService.categoryBreakdown(periodTransactions, TransactionType.income);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reports')),
@@ -74,12 +75,12 @@ class ReportsScreen extends ConsumerWidget {
             child: _TrendLineChart(trend: monthlyTrend),
           ),
           const SizedBox(height: 24),
-          Text('Expense Breakdown',
+          Text('Expense Breakdown (${_periodLabel(period)})',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           _BreakdownCard(entries: expenseBreakdown, symbol: symbol, baseColor: AppColors.expense),
           const SizedBox(height: 24),
-          Text('Income Breakdown',
+          Text('Income Breakdown (${_periodLabel(period)})',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           _BreakdownCard(entries: incomeBreakdown, symbol: symbol, baseColor: AppColors.income),
@@ -99,6 +100,32 @@ class ReportsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  List<TransactionModel> _transactionsForPeriod(List<TransactionModel> all, ReportPeriod period) {
+    switch (period) {
+      case ReportPeriod.daily:
+        return ReportService.today(all);
+      case ReportPeriod.weekly:
+        return ReportService.thisWeek(all);
+      case ReportPeriod.monthly:
+        return ReportService.thisMonth(all);
+      case ReportPeriod.yearly:
+        return ReportService.thisYear(all);
+    }
+  }
+
+  String _periodLabel(ReportPeriod period) {
+    switch (period) {
+      case ReportPeriod.daily:
+        return 'Today';
+      case ReportPeriod.weekly:
+        return 'This Week';
+      case ReportPeriod.monthly:
+        return 'This Month';
+      case ReportPeriod.yearly:
+        return 'This Year';
+    }
   }
 
   Widget _summaryRow(BuildContext context, String label, double value, Color color, String symbol) {
