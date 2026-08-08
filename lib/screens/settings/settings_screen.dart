@@ -126,10 +126,13 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Divider(),
           _SectionHeader(title: 'About'),
-          const ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('About Pocket Ledger'),
-            subtitle: Text('A simple offline bookkeeping app for small businesses and freelancers'),
+          ListTile(
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset('assets/branding/logo.png', width: 32, height: 32),
+            ),
+            title: const Text('About Pocket Ledger'),
+            subtitle: const Text('A simple offline bookkeeping app for small businesses and freelancers'),
           ),
           const ListTile(
             leading: Icon(Icons.privacy_tip_outlined),

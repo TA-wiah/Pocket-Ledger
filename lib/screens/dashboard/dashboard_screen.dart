@@ -101,7 +101,7 @@ class DashboardScreen extends ConsumerWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
-                childAspectRatio: 1.5,
+                mainAxisExtent: 140,
               ),
               itemBuilder: (context, index) {
                 final c = cards[index];

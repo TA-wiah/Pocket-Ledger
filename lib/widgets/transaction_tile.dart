@@ -103,13 +103,22 @@ class TransactionTile extends ConsumerWidget {
                         Text(
                           '${transaction.category} · ${AppDateUtils.formatDayMonth(transaction.date)}',
                           style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
-                  Text(
-                    '${isIncome ? '+' : '-'}${CurrencyFormatter.format(transaction.amount, symbol: symbol)}',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: color),
+                  const SizedBox(width: 8),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 130),
+                    child: Text(
+                      '${isIncome ? '+' : '-'}${CurrencyFormatter.format(transaction.amount, symbol: symbol)}',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: color),
+                      textAlign: TextAlign.right,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),

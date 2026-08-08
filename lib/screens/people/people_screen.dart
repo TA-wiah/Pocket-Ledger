@@ -60,11 +60,17 @@ class PeopleScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Total Outstanding', style: TextStyle(fontWeight: FontWeight.w600)),
-                      Text(
-                        CurrencyFormatter.format(totalOutstanding, symbol: symbol),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: totalOutstanding > 0 ? AppColors.expense : AppColors.income,
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Text(
+                          CurrencyFormatter.format(totalOutstanding, symbol: symbol),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: totalOutstanding > 0 ? AppColors.expense : AppColors.income,
+                          ),
+                          textAlign: TextAlign.right,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -96,7 +102,14 @@ class PeopleScreen extends ConsumerWidget {
                             ),
                           ),
                           cells: [
-                            DataCell(Text(b.person.name)),
+                            DataCell(ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 140),
+                              child: Text(
+                                b.person.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )),
                             DataCell(Text(CurrencyFormatter.formatCompact(b.given, symbol: symbol))),
                             DataCell(Text(CurrencyFormatter.formatCompact(b.received, symbol: symbol))),
                             DataCell(Text(

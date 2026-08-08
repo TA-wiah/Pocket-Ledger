@@ -70,9 +70,20 @@ class _LockScreenState extends ConsumerState<LockScreen> with SingleTickerProvid
         child: Column(
           children: [
             const Spacer(flex: 2),
-            Icon(Icons.lock_outline, size: 56, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 16),
-            const Text('Enter PIN', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset('assets/branding/logo.png', width: 72, height: 72),
+            ),
+            const SizedBox(height: 12),
+            const Text('Pocket Ledger', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 4),
+            Text(
+              'Enter PIN',
+              style: TextStyle(
+                fontSize: 15,
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.65),
+              ),
+            ),
             const SizedBox(height: 24),
             AnimatedBuilder(
               animation: _shakeController,

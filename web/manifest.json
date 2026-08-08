@@ -1,11 +1,11 @@
 {
-    "name": "pocket_ledger",
-    "short_name": "pocket_ledger",
+    "name": "Pocket Ledger",
+    "short_name": "Pocket Ledger",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#2563EB",
+    "theme_color": "#2563EB",
+    "description": "Pocket Ledger - offline bookkeeping for small businesses and freelancers.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

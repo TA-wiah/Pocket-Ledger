@@ -105,16 +105,24 @@ class ReportsScreen extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            Container(width: 10, height: 10, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-            const SizedBox(width: 8),
-            Text(label),
-          ],
+        Expanded(
+          child: Row(
+            children: [
+              Container(width: 10, height: 10, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+              const SizedBox(width: 8),
+              Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
+            ],
+          ),
         ),
-        Text(
-          CurrencyFormatter.format(value, symbol: symbol),
-          style: TextStyle(fontWeight: FontWeight.bold, color: color),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            CurrencyFormatter.format(value, symbol: symbol),
+            style: TextStyle(fontWeight: FontWeight.bold, color: color),
+            textAlign: TextAlign.right,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -183,8 +191,19 @@ class _BreakdownCard extends StatelessWidget {
                 children: [
                   Container(width: 10, height: 10, decoration: BoxDecoration(color: colors[i], shape: BoxShape.circle)),
                   const SizedBox(width: 8),
-                  Expanded(child: Text(e.category)),
-                  Text(CurrencyFormatter.format(e.amount, symbol: symbol)),
+                  Expanded(
+                    child: Text(e.category, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ),
+                  const SizedBox(width: 8),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 110),
+                    child: Text(
+                      CurrencyFormatter.format(e.amount, symbol: symbol),
+                      textAlign: TextAlign.right,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
             );

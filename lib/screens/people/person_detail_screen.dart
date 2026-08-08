@@ -126,12 +126,18 @@ class PersonDetailScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label),
-        Text(
-          CurrencyFormatter.format(value, symbol: symbol),
-          style: TextStyle(
-            fontWeight: bold ? FontWeight.bold : FontWeight.w600,
-            color: color,
-            fontSize: bold ? 18 : 14,
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(
+            CurrencyFormatter.format(value, symbol: symbol),
+            style: TextStyle(
+              fontWeight: bold ? FontWeight.bold : FontWeight.w600,
+              color: color,
+              fontSize: bold ? 18 : 14,
+            ),
+            textAlign: TextAlign.right,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
