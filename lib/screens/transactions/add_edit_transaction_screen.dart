@@ -120,9 +120,13 @@ class _AddEditTransactionScreenState extends ConsumerState<AddEditTransactionScr
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
               initialValue: _category,
+              isExpanded: true,
               decoration: const InputDecoration(labelText: 'Category'),
               items: categories
-                  .map((c) => DropdownMenuItem(value: c.name, child: Text(c.name)))
+                  .map((c) => DropdownMenuItem(
+                        value: c.name,
+                        child: Text(c.name, overflow: TextOverflow.ellipsis),
+                      ))
                   .toList(),
               onChanged: (value) => setState(() => _category = value),
             ),
@@ -133,12 +137,16 @@ class _AddEditTransactionScreenState extends ConsumerState<AddEditTransactionScr
                 Expanded(
                   child: DropdownButtonFormField<String?>(
                     initialValue: _personId,
+                    isExpanded: true,
                     decoration: InputDecoration(
                       labelText: isLoanCategory ? 'Person *' : 'Person (optional)',
                     ),
                     items: [
                       if (!isLoanCategory) const DropdownMenuItem(value: null, child: Text('None')),
-                      ...people.map((p) => DropdownMenuItem(value: p.id, child: Text(p.name))),
+                      ...people.map((p) => DropdownMenuItem(
+                            value: p.id,
+                            child: Text(p.name, overflow: TextOverflow.ellipsis),
+                          )),
                     ],
                     onChanged: (value) => setState(() => _personId = value),
                   ),
@@ -181,9 +189,13 @@ class _AddEditTransactionScreenState extends ConsumerState<AddEditTransactionScr
             const SizedBox(height: 12),
             DropdownButtonFormField<TransactionStatus>(
               initialValue: _status,
+              isExpanded: true,
               decoration: const InputDecoration(labelText: 'Status'),
               items: TransactionStatus.values
-                  .map((s) => DropdownMenuItem(value: s, child: Text(_statusLabel(s))))
+                  .map((s) => DropdownMenuItem(
+                        value: s,
+                        child: Text(_statusLabel(s), overflow: TextOverflow.ellipsis),
+                      ))
                   .toList(),
               onChanged: (value) => setState(() => _status = value ?? _status),
             ),

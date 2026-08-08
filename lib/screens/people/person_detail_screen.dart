@@ -31,7 +31,7 @@ class PersonDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(balance.person.name),
+        title: Text(balance.person.name, maxLines: 1, overflow: TextOverflow.ellipsis),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_outline),

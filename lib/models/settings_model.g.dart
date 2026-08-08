@@ -21,7 +21,7 @@ class SettingsModelAdapter extends TypeAdapter<SettingsModel> {
       currencyCode: fields[1] as String,
       currencySymbol: fields[2] as String,
       language: fields[3] as String,
-      isPinEnabled: fields[4] as bool,
+      isPinEnabled: fields[4] == null ? false : fields[4] as bool,
       pinHash: fields[5] as String?,
       pinSalt: fields[6] as String?,
     );

@@ -152,11 +152,12 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                 Expanded(
                   child: DropdownButtonFormField<TransactionType?>(
                     initialValue: filter.type,
+                    isExpanded: true,
                     decoration: const InputDecoration(labelText: 'Type', isDense: true),
                     items: const [
-                      DropdownMenuItem(value: null, child: Text('All Types')),
-                      DropdownMenuItem(value: TransactionType.income, child: Text('Income')),
-                      DropdownMenuItem(value: TransactionType.expense, child: Text('Expense')),
+                      DropdownMenuItem(value: null, child: Text('All Types', overflow: TextOverflow.ellipsis)),
+                      DropdownMenuItem(value: TransactionType.income, child: Text('Income', overflow: TextOverflow.ellipsis)),
+                      DropdownMenuItem(value: TransactionType.expense, child: Text('Expense', overflow: TextOverflow.ellipsis)),
                     ],
                     onChanged: (value) {
                       ref.read(transactionFilterProvider.notifier).state = filter.copyWith(
@@ -170,10 +171,17 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                 Expanded(
                   child: DropdownButtonFormField<String?>(
                     initialValue: filter.category,
+                    isExpanded: true,
                     decoration: const InputDecoration(labelText: 'Category', isDense: true),
                     items: [
-                      const DropdownMenuItem(value: null, child: Text('All Categories')),
-                      ...categories.map((c) => DropdownMenuItem(value: c.name, child: Text(c.name))),
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('All Categories', overflow: TextOverflow.ellipsis),
+                      ),
+                      ...categories.map((c) => DropdownMenuItem(
+                            value: c.name,
+                            child: Text(c.name, overflow: TextOverflow.ellipsis),
+                          )),
                     ],
                     onChanged: (value) {
                       ref.read(transactionFilterProvider.notifier).state = filter.copyWith(

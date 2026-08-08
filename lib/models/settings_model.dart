@@ -16,7 +16,7 @@ class SettingsModel extends HiveObject {
   @HiveField(3)
   String language;
 
-  @HiveField(4)
+  @HiveField(4, defaultValue: false)
   bool isPinEnabled;
 
   @HiveField(5)
